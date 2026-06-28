@@ -1,0 +1,24 @@
+{
+  "name": "beeax-docs",
+  "description": "BeeAX documentation site powered by Mintlify",
+  "author": "shibin <shibinsp43@gmail.com>",
+  "private": true,
+  "license": "AGPL-3.0",
+  "scripts": {
+    "dev": "mintlify dev",
+    "validate": "mintlify validate",
+    "fix-links": "bash scripts/fix-translated-links.sh",
+    "lint": "npx oxlint -c .oxlintrc.json ."
+  },
+  "dependencies": {
+    "mintlify": "^4.2.594"
+  },
+  "devDependencies": {
+    "beeax-shared": "workspace:*"
+  },
+  "engines": {
+    "node": "^24.5.0",
+    "npm": "please-use-yarn",
+    "yarn": "^4.0.2"
+  }
+}
