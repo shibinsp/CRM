@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e
+
+mkdir -p ~/.config/systemd/user
+[ -f beeaxcrm.service ] || { echo "Error: beeaxcrm.service not found"; exit 1; }
+cp beeaxcrm.service ~/.config/systemd/user
+
+
+systemctl --user daemon-reload
+systemctl --user enable beeaxcrm.service
+systemctl --user start beeaxcrm.service
