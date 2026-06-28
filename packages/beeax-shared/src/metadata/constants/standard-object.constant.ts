@@ -1757,6 +1757,9 @@ export const STANDARD_OBJECTS = {
       aiScoreReason: {
         universalIdentifier: '30303030-0002-4002-8002-000000000002',
       },
+      aiInsights: {
+        universalIdentifier: '30303030-0003-4003-8003-000000000003',
+      },
       searchVector: {
         universalIdentifier: '428a0da5-4b2e-4ce3-b695-89a8b384e6e3',
       },
