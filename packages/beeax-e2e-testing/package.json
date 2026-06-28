@@ -1,0 +1,11 @@
+{
+  "name": "beeax-e2e-testing",
+  "description": "",
+  "author": "shibin <shibinsp43@gmail.com>",
+  "private": true,
+  "license": "AGPL-3.0",
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "playwright": "^1.60.0"
+  }
+}
