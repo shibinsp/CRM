@@ -1,0 +1,87 @@
+---
+title: الخادم المحلي
+description: إدارة خادم BeeAX المحلي المستند إلى Docker — بدء التشغيل، الإيقاف، الترقية، مثيل اختبار متوازٍ، وإعداد SDK اليدوي.
+icon: server
+---
+
+## إدارة الخادم المحلي
+
+استخدم `yarn beeax docker:*` للتحكّم في حاوية BeeAX المحلية:
+
+| أمر                                    | ماذا يفعل                                          |
+| -------------------------------------- | -------------------------------------------------- |
+| `yarn beeax docker:start`             | بدء تشغيل الخادم (يسحب الصورة إذا لزم الأمر)       |
+| `yarn beeax docker:start 2.2.0`       | بدء إصدار محدد من الخادم                           |
+| `yarn beeax docker:start --port 3030` | بدء التشغيل على منفذ مخصّص                         |
+| `yarn beeax docker:stop`              | إيقاف الخادم (مع الحفاظ على البيانات)              |
+| `yarn beeax docker:status`            | عرض عنوان URL والإصدار وبيانات اعتماد تسجيل الدخول |
+| `yarn beeax docker:logs`              | بث سجلات الخادم                                    |
+| `yarn beeax docker:reset`             | مسح البيانات والبدء من جديد                        |
+| `yarn beeax docker:upgrade`           | سحب أحدث صورة `beeax-app-dev`                     |
+| `yarn beeax docker:upgrade 2.2.0`     | الترقية إلى إصدار محدد                             |
+
+تظل البيانات محفوظة عبر عمليات إعادة التشغيل في وحدتي تخزين Docker (`beeax-app-dev-data` لـ PostgreSQL، و`beeax-app-dev-storage` للملفات). استخدم `reset` لمسح كل شيء.
+
+## تثبيت إصدار الخادم
+
+عند عدم تمرير أي إصدار، يقوم `docker:start` باشتقاق الإصدار من النطاق `engines.beeax` في ملف `package.json` لتطبيقك — وهو نفس النطاق الذي يتحقق منه الخادم عند تثبيت تطبيقك. يشغّل أحدث صورة منشورة لـ `beeax-app-dev` التي تُلبي هذا النطاق، مع الرجوع إلى `latest` عندما يكون الحقل غير موجودًا أو لا يتطابق أي إصدار منشور:
+
+```json filename="package.json"
+{
+  "engines": {
+    "beeax": ">=2.2.0"
+  }
+}
+```
+
+مرِّر إصدارًا بشكلٍ صريح لتجاوز النطاق لتشغيلٍ واحد فقط: `yarn beeax docker:start 2.3.0`. إذا كانت هناك حاوية موجودة بالفعل على إصدار مختلف، يقوم `docker:start` بترقيتها في مكانها (مع إعادة إنشاء الحاوية مع الحفاظ على وحدات تخزين بياناتك).
+
+## ترقية صورة الخادم
+
+يقوم `yarn beeax docker:upgrade` بسحب أحدث صورة، ومقارنة التجزئات، ولا يعيد إنشاء الحاوية إلا إذا حدث تغيير فعلي. تظل وحدات التخزين محفوظة — ويتم استبدال الحاوية فقط. إذا تم سحب صورة جديدة وكانت الحاوية تعمل، فستبدأ عملية الترقية تلقائيًا حاوية جديدة؛ شغّل بعد ذلك `yarn beeax docker:start` للانتظار حتى تصبح سليمة.
+
+```bash filename="Terminal"
+yarn beeax docker:upgrade            # Latest
+yarn beeax docker:upgrade 2.2.0      # Specific version
+```
+
+تحقّق من الإصدار الجاري باستخدام `yarn beeax docker:status` (يعرض قيمة `APP_VERSION` المضمنة في الحاوية).
+
+## تشغيل مثيل اختبار متوازٍ
+
+مرّر `--test` إلى أي أمر `docker:*` لإدارة مثيل ثانٍ معزول تمامًا — مفيد لاختبارات التكامل أو للتجربة من دون لمس بيانات التطوير الرئيسية لديك:
+
+| أمر                                 | ماذا يفعل                                 |
+| ----------------------------------- | ----------------------------------------- |
+| `yarn beeax docker:start --test`   | بدء مثيل الاختبار (المنفذ الافتراضي 2021) |
+| `yarn beeax docker:stop --test`    | إيقافه                                    |
+| `yarn beeax docker:status --test`  | عرض حالته                                 |
+| `yarn beeax docker:logs --test`    | بث سجلاته                                 |
+| `yarn beeax docker:reset --test`   | مسح بياناته                               |
+| `yarn beeax docker:upgrade --test` | ترقية صورته                               |
+
+يملك مثيل الاختبار حاويته الخاصة (`beeax-app-dev-test`) ووحدات التخزين الخاصة به (`beeax-app-dev-test-data`، `beeax-app-dev-test-storage`) وتهيئته — ويعمل جنبًا إلى جنب مع مثيلك الرئيسي بدون تعارضات. اجمع `--test` مع `--port` لتجاوز المنفذ 2021.
+
+## إعداد يدوي (بدون أداة توليد الهيكل)
+
+تجاوز أداة توليد الهيكل إذا كنت تضيف SDK إلى مشروع قائم:
+
+```bash filename="Terminal"
+yarn add beeax-sdk beeax-client-sdk
+```
+
+أضِف النص البرمجي إلى `package.json`:
+
+```json filename="package.json"
+{
+  "scripts": {
+    "beeax": "beeax"
+  }
+}
+```
+
+يمكنك الآن تشغيل `yarn beeax dev`، و`yarn beeax docker:start`، والبقية.
+
+<Note>
+لا تثبّت `beeax-sdk` عالميًا — ثبِّته لكل مشروع بحيث يستخدم كل تطبيق إصداره الخاص.
+</Note>
