@@ -227,3 +227,11 @@ This handles everything: starts Postgres + Redis (auto-detects local services vs
 
 - **Never add a Claude Code watermark to commits.** Do not include a `🤖 Generated with Claude Code` line and do not add a `Co-Authored-By: Claude ...` trailer to any commit message.
 - **One file per commit.** Each file change is its own commit, authored by `shibin <shibinsp43@gmail.com>`.
+
+## Asset / image conventions
+
+- **Never leave image files loose in the repo root** (or any package root). Every image lives inside a folder under `images/`:
+  - `images/brand/` — logo & brand assets (e.g. `beeax-logo-source.jpeg`, `Beeax_Brand_Kit.xlsx`)
+  - `images/screenshots/` — screenshots (product shots, verification captures, README images)
+- When generating or saving screenshots/captures, write them straight into `images/screenshots/` — never into the working directory / repo root.
+- Package-owned assets referenced by code (e.g. `packages/beeax-front/public/images/**`, a package's `logo.png`/`favicon.png`) stay with their package — this rule is about not scattering loose/throwaway images at the repo root.
