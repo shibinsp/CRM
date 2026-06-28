@@ -1,164 +1,100 @@
-<p align="center">
-  <a href="https://www.beeax.com">
-    <img src="./packages/beeax-website/public/images/core/logo.svg" width="100px" alt="BeeAX logo" />
-  </a>
-</p>
+# BeeAX CRM
 
-<h2 align="center">The #1 Open-Source CRM</h2>
+BeeAX CRM is an open-source, customizable CRM platform. It gives technical teams the
+building blocks of a modern CRM — objects, fields, views, workflows, and AI agents — and
+lets you extend everything as code.
 
-<p align="center"><a href="https://beeax.com"><img src="./packages/beeax-website/public/images/readme/globe-icon.svg" width="12" height="12"/> Website</a> · <a href="https://docs.beeax.com"><img src="./packages/beeax-website/public/images/readme/book-icon.svg" width="12" height="12"/> Documentation</a> · <a href="https://github.com/orgs/beeax/projects/1"><img src="./packages/beeax-website/public/images/readme/map-icon.svg" width="12" height="12"/> Roadmap </a> · <a href="https://discord.gg/cx5n4Jzs57"><img src="./packages/beeax-website/public/images/readme/discord-icon.svg" width="12" height="12"/> Discord</a> · <a href="https://www.figma.com/file/xt8O9mFeLl46C5InWwoMrN/BeeAX"><img src="./packages/beeax-website/public/images/readme/figma-icon.webp"  width="12" height="12"/>  Figma</a></p>
+The data model is fully metadata-driven: standard objects (companies, people, opportunities,
+notes, tasks) and any custom objects you define are first-class, each backed by real database
+tables and a generated GraphQL API.
 
-<p align="center">
-  <a href="https://www.beeax.com">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="./packages/beeax-website/public/images/readme/github-cover-dark.webp" />
-      <source media="(prefers-color-scheme: light)" srcset="./packages/beeax-website/public/images/readme/github-cover-light.webp" />
-      <img src="./packages/beeax-website/public/images/readme/github-cover-light.webp" alt="BeeAX banner" />
-    </picture>
-  </a>
-</p>
+- **Repository:** https://github.com/shibinsp/CRM
+- **License:** AGPL-3.0 (see [LICENSE](./LICENSE))
 
-<br />
+## Features
 
-# Why BeeAX
+- **Metadata-driven data model** — custom objects and fields with real tables, indexes, and APIs
+- **Multiple views** — table, kanban, and calendar with filters, sorts, and grouping
+- **Workflows & automation** — triggers, actions, and a visual builder
+- **AI agents** — assistants and automation powered by the latest models
+- **Email & calendar sync** — Gmail / Microsoft via OAuth
+- **Granular permissions** — object-, field-, and row-level access control
+- **REST & GraphQL APIs** — plus API keys and webhooks
+- **Multi-tenant** — isolated per-workspace schemas
 
-BeeAX gives technical teams the building blocks for a custom CRM that meets complex business needs and quickly adapts as the business evolves. BeeAX is the CRM you build, ship, and version like the rest of your stack.
+## Tech stack
 
-<a href="https://beeax.com/resources/why-beeax"><img src="./packages/beeax-website/public/images/readme/star-icon.svg" width="14" height="14"/> Learn more about why we built BeeAX</a>
+- **Frontend:** React, TypeScript, Jotai, Linaria, Vite, Apollo Client
+- **Backend:** NestJS, TypeORM, PostgreSQL, Redis, GraphQL (GraphQL Yoga), BullMQ
+- **Monorepo:** Nx workspace managed with Yarn 4 (Node 24)
 
-<br />
+## Monorepo structure
 
-# Installation
+```
+packages/
+├── beeax-front/      # React frontend application
+├── beeax-server/     # NestJS backend API + worker
+├── beeax-ui/         # Shared UI component library
+├── beeax-shared/     # Common types and utilities
+├── beeax-emails/     # Transactional email templates (React Email)
+├── beeax-sdk/        # CLI + SDK for building apps as code
+├── beeax-docker/     # Docker, Compose, and Kubernetes manifests
+├── beeax-docs/       # Documentation
+└── beeax-website/    # Marketing website
+```
 
-### <img src="./packages/beeax-website/public/images/readme/globe-icon.svg" width="14" height="14"/> Cloud
+## Getting started (local development)
 
-The fastest way to get started. Sign up at [beeax.com](https://beeax.com) and spin up a workspace in under a minute, with no infrastructure to manage and always up to date.
-
-### <img src="./packages/beeax-website/public/images/readme/book-icon.svg" width="14" height="14"/> Build an app
-
-Scaffold a new app with the BeeAX CLI:
+**Prerequisites:** Node `^24.5.0`, Yarn `>=4`, and either local PostgreSQL + Redis or Docker.
 
 ```bash
-npx create-beeax-app my-app
+# 1. Clone
+git clone https://github.com/shibinsp/CRM.git
+cd CRM
+
+# 2. Install dependencies
+yarn install
+
+# 3. Set up the dev environment
+#    (starts Postgres + Redis, copies .env files, initializes the database)
+bash packages/beeax-utils/setup-dev-env.sh
+
+# 4. Start frontend + backend + worker
+yarn start
 ```
 
-Define objects, fields, and views as code:
+The frontend runs on http://localhost:3001 and the server on http://localhost:3000.
+On the sign-in screen, click **Continue with Email** to use the prefilled local credentials.
 
-```ts
-import { defineObject, FieldType } from 'beeax-sdk/define';
-
-export default defineObject({
-  nameSingular: 'deal',
-  namePlural: 'deals',
-  labelSingular: 'Deal',
-  labelPlural: 'Deals',
-  fields: [
-    { name: 'name', label: 'Name', type: FieldType.TEXT },
-    { name: 'amount', label: 'Amount', type: FieldType.CURRENCY },
-    { name: 'closeDate', label: 'Close Date', type: FieldType.DATE_TIME },
-  ],
-});
-```
-
-Then ship it to your workspace:
+## Running with Docker
 
 ```bash
-npx beeax app:publish --private
+cd packages/beeax-docker
+cp .env.example .env   # set ENCRYPTION_KEY, APP_SECRET, etc.
+docker compose up -d
 ```
 
-See the [app development guide](https://docs.beeax.com/developers/extend/apps/getting-started) for objects, views, agents, and logic functions.
+## Common commands
 
-### <img src="./packages/beeax-website/public/images/readme/rocket-icon.svg" width="14" height="14"/> Self-hosting
+```bash
+# Run a single test file
+npx jest path/to/test.test.ts --config=packages/<package>/jest.config.mjs
 
-Run BeeAX on your own infrastructure with [Docker Compose](https://docs.beeax.com/developers/self-host/capabilities/docker-compose), or contribute locally via the [local setup guide](https://docs.beeax.com/developers/contribute/capabilities/local-setup).
+# Lint / typecheck a package
+npx nx lint beeax-front
+npx nx typecheck beeax-server
 
-<br />
-<br />
+# Build (build beeax-shared first)
+npx nx build beeax-shared
+npx nx build beeax-front
+npx nx build beeax-server
 
-# Everything you need
+# Reset the database
+npx nx database:reset beeax-server
+```
 
-BeeAX gives you the building blocks of a modern CRM (objects, views, workflows, and agents) and lets you extend them as code. Here's a tour of what's in the box.
+See [CLAUDE.md](./CLAUDE.md) for the full development guide and conventions.
 
-Want to go deeper? Read the <a href="https://docs.beeax.com/user-guide/introduction"><img src="./packages/beeax-website/public/images/readme/planner-icon.svg" width="14" height="14"/> User Guide</a> for product walkthroughs, or the <a href="https://docs.beeax.com"><img src="./packages/beeax-website/public/images/readme/book-icon.svg" width="14" height="14"/> Documentation</a> for developer reference.
+## License
 
-<table align="center">
-  <tr>
-    <td width="50%">
-      <picture>
-        <source media="(prefers-color-scheme: dark)" srcset="./packages/beeax-website/public/images/readme/v2-build-apps-dark.webp" />
-        <source media="(prefers-color-scheme: light)" srcset="./packages/beeax-website/public/images/readme/v2-build-apps-light.webp" />
-        <img src="./packages/beeax-website/public/images/readme/v2-build-apps-light.webp" alt="Create your apps" />
-      </picture>
-      <p align="center"><a href="https://docs.beeax.com/developers/extend/apps/getting-started"><img src="./packages/beeax-website/public/images/readme/code-icon.svg" width="16" height="16"/> Learn more about apps in doc</a></p>
-    </td>
-    <td width="50%">
-      <picture>
-        <source media="(prefers-color-scheme: dark)" srcset="./packages/beeax-website/public/images/readme/v2-version-control-dark.webp" />
-        <source media="(prefers-color-scheme: light)" srcset="./packages/beeax-website/public/images/readme/v2-version-control-light.webp" />
-        <img src="./packages/beeax-website/public/images/readme/v2-version-control-light.webp" alt="Stay on top with version control" />
-      </picture>
-      <p align="center"><a href="https://docs.beeax.com/developers/extend/apps/publishing"><img src="./packages/beeax-website/public/images/readme/monitor-icon.svg" width="16" height="16"/> Learn more about version control in doc</a></p>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%">
-      <picture>
-        <source media="(prefers-color-scheme: dark)" srcset="./packages/beeax-website/public/images/readme/v2-all-tools-dark.webp" />
-        <source media="(prefers-color-scheme: light)" srcset="./packages/beeax-website/public/images/readme/v2-all-tools-light.webp" />
-        <img src="./packages/beeax-website/public/images/readme/v2-all-tools-light.webp" alt="All the tools you need to build anything" />
-      </picture>
-      <p align="center"><a href="https://docs.beeax.com/developers/extend/apps/building"><img src="./packages/beeax-website/public/images/readme/rocket-icon.svg" width="16" height="16"/> Learn more about primitives in doc</a></p>
-    </td>
-    <td width="50%">
-      <picture>
-        <source media="(prefers-color-scheme: dark)" srcset="./packages/beeax-website/public/images/readme/v2-tools-dark.webp" />
-        <source media="(prefers-color-scheme: light)" srcset="./packages/beeax-website/public/images/readme/v2-tools-light.webp" />
-        <img src="./packages/beeax-website/public/images/readme/v2-tools-light.webp" alt="Customize your layouts" />
-      </picture>
-      <p align="center"><a href="https://docs.beeax.com/user-guide/layout/overview"><img src="./packages/beeax-website/public/images/readme/planner-icon.svg" width="16" height="16"/> Learn more about layouts in doc</a></p>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%">
-      <picture>
-        <source media="(prefers-color-scheme: dark)" srcset="./packages/beeax-website/public/images/readme/v2-ai-agents-dark.webp" />
-        <source media="(prefers-color-scheme: light)" srcset="./packages/beeax-website/public/images/readme/v2-ai-agents-light.webp" />
-        <img src="./packages/beeax-website/public/images/readme/v2-ai-agents-light.webp" alt="AI agents and chats" />
-      </picture>
-      <p align="center"><a href="https://docs.beeax.com/user-guide/ai/overview"><img src="./packages/beeax-website/public/images/readme/message-icon.svg" width="16" height="16"/> Learn more about AI in doc</a></p>
-    </td>
-    <td width="50%">
-      <picture>
-        <source media="(prefers-color-scheme: dark)" srcset="./packages/beeax-website/public/images/readme/v2-crm-tools-dark.webp" />
-        <source media="(prefers-color-scheme: light)" srcset="./packages/beeax-website/public/images/readme/v2-crm-tools-light.webp" />
-        <img src="./packages/beeax-website/public/images/readme/v2-crm-tools-light.webp" alt="Plus all the tools of a good CRM" />
-      </picture>
-      <p align="center"><a href="https://docs.beeax.com/user-guide/introduction"><img src="./packages/beeax-website/public/images/readme/star-icon.svg" width="16" height="16"/> Learn more about CRM features in doc</a></p>
-    </td>
-  </tr>
-</table>
-
-<br />
-
-# Stack
-
-- <a href="https://www.typescriptlang.org/"><img src="./packages/beeax-website/public/images/readme/stack-typescript.svg" width="14" height="14"/> TypeScript</a>
-- <a href="https://nx.dev/"><img src="./packages/beeax-website/public/images/readme/stack-nx.svg" width="14" height="14"/> Nx</a>
-- <a href="https://nestjs.com/"><img src="./packages/beeax-website/public/images/readme/stack-nestjs.svg" width="14" height="14"/> NestJS</a>, with <a href="https://bullmq.io/">BullMQ</a>, <a href="https://www.postgresql.org/"><img src="./packages/beeax-website/public/images/readme/stack-postgresql.svg" width="14" height="14"/> PostgreSQL</a>, <a href="https://redis.io/"><img src="./packages/beeax-website/public/images/readme/stack-redis.svg" width="14" height="14"/> Redis</a>
-- <a href="https://reactjs.org/"><img src="./packages/beeax-website/public/images/readme/stack-react.svg" width="14" height="14"/> React</a>, with <a href="https://jotai.org/">Jotai</a>, <a href="https://linaria.dev/">Linaria</a> and <a href="https://lingui.dev/">Lingui</a>
-
-# Thanks
-
-<p align="center">
-  <a href="https://greptile.com"><img src="./packages/beeax-website/public/images/readme/greptile.webp" height="28" alt="Greptile" /></a>
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <a href="https://sentry.io/"><img src="./packages/beeax-website/public/images/readme/sentry.webp" height="28" alt="Sentry" /></a>
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <a href="https://crowdin.com/"><img src="./packages/beeax-website/public/images/readme/crowdin.webp" height="28" alt="Crowdin" /></a>
-</p>
-
-Thanks to these amazing services that we use and recommend for code review (Greptile), catching bugs (Sentry) and translating (Crowdin).
-
-# Join the Community
-
-<p><a href="https://github.com/beeax/beeax"><img src="./packages/beeax-website/public/images/readme/star-icon.svg" width="12" height="12"/> Star the repo</a> · <a href="https://discord.gg/cx5n4Jzs57"><img src="./packages/beeax-website/public/images/readme/discord-icon.svg" width="12" height="12"/> Discord</a> · <a href="https://github.com/beeax/beeax/discussions"><img src="./packages/beeax-website/public/images/readme/message-icon.svg" width="12" height="12"/> Feature requests</a> · <a href="https://github.com/orgs/beeax/projects/1/views/35"><img src="./packages/beeax-website/public/images/readme/rocket-icon.svg" width="12" height="12"/> Releases</a> · <a href="https://twitter.com/beeaxcrm"><img src="./packages/beeax-website/public/images/readme/x-icon.svg" width="12" height="12"/> X</a> · <a href="https://www.linkedin.com/company/beeax/"><img src="./packages/beeax-website/public/images/readme/linkedin-icon.svg" width="12" height="12"/> LinkedIn</a> · <a href="https://beeax.crowdin.com/beeax"><img src="./packages/beeax-website/public/images/readme/language-icon.svg" width="12" height="12"/> Crowdin</a> · <a href="https://github.com/beeax/beeax/contribute"><img src="./packages/beeax-website/public/images/readme/code-icon.svg" width="12" height="12"/> Contribute</a></p>
+BeeAX CRM is released under the **AGPL-3.0** license. See [LICENSE](./LICENSE) for details.
