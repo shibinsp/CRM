@@ -1,0 +1,50 @@
+{
+  "name": "beeax",
+  "version": "0.1.0",
+  "description": "Create, operate, develop, publish, and query BeeAX apps through Codex.",
+  "author": {
+    "name": "shibin",
+    "url": "https://beeax.com/"
+  },
+  "homepage": "https://docs.beeax.com/",
+  "repository": "https://github.com/beeax/beeax",
+  "license": "AGPL-3.0",
+  "keywords": [
+    "beeax",
+    "create-beeax-app",
+    "mcp",
+    "oauth",
+    "crm",
+    "apps",
+    "scaffolding",
+    "cli",
+    "beeax-sdk",
+    "publishing"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "BeeAX",
+    "shortDescription": "Create, develop, publish, and query apps",
+    "longDescription": "Scaffold, develop, deploy, and publish BeeAX apps end-to-end. Five focused skills cover app creation, entity development (objects, fields, logic, layouts, front components), remote/sync/deploy operations, marketplace publishing assets, and workspace data retrieval via MCP. The bundled BeeAX docs MCP server keeps guidance current, and the setup helper wires per-user workspace MCP with OAuth in one command.",
+    "developerName": "shibin",
+    "category": "Coding",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://beeax.com/",
+    "privacyPolicyURL": "https://beeax.com/privacy-policy",
+    "termsOfServiceURL": "https://beeax.com/terms",
+    "defaultPrompt": [
+      "Create and run a new BeeAX app",
+      "Push a BeeAX app to production",
+      "Develop a BeeAX app feature"
+    ],
+    "brandColor": "#000000",
+    "composerIcon": "./assets/beeax-logo.svg",
+    "logo": "./assets/beeax-logo.png",
+    "screenshots": []
+  }
+}
