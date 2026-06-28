@@ -1,0 +1,71 @@
+#!/bin/bash
+set -e
+if [ ! -f "$(dirname "$0")/.env" ]; then
+    echo "Error: .env file not found"
+    exit 1
+fi
+source "$(dirname "$0")/.env"
+
+## steps to cleanup and start over from scratch - useful when testing
+#podman pod stop beeax-pod
+#podman pod rm beeax-pod
+#podman volume rm beeax-db-data beeax-server-data beeax-redis-data
+# end of cleanup
+
+podman volume create beeax-db-data
+podman volume create beeax-server-data
+podman volume create beeax-redis-data
+
+podman pod create --name beeax-pod -p 127.0.0.1:8080:3000
+
+podman run -d --pod beeax-pod --name beeax-db \
+  -e POSTGRES_DB=beeax \
+  -e POSTGRES_USER=beeax \
+  -e POSTGRES_PASSWORD="$POSTGRES_PASSWORD" \
+  -v beeax-db-data:/var/lib/postgresql/data:Z \
+  docker.io/library/postgres:16
+
+podman run -d --pod beeax-pod --name beeax-redis \
+  -v beeax-redis-data:/data:Z \
+  docker.io/library/redis:latest
+
+podman run -d --pod beeax-pod --name beeax-server \
+  -e NODE_PORT=3000 \
+  -e SERVER_URL="$SERVER_URL" \
+  -e PG_DATABASE_URL="postgresql://beeax:$POSTGRES_PASSWORD@beeax-db:5432/beeax" \
+  -e REDIS_URL="redis://beeax-redis:6379" \
+  -e APP_SECRET="$APP_SECRET" \
+  -e NODE_ENV=production \
+  -e LOG_LEVEL=info \
+  -v beeax-server-data:/app/docker-data:Z \
+  docker.io/beeaxcrm/beeax:latest
+
+podman run -d --pod beeax-pod --name beeax-worker \
+  --init \
+  -e SERVER_URL="$SERVER_URL" \
+  -e PG_DATABASE_URL="postgresql://beeax:$POSTGRES_PASSWORD@beeax-db:5432/beeax" \
+  -e REDIS_URL="redis://beeax-redis:6379" \
+  -e APP_SECRET="$APP_SECRET" \
+  -e DISABLE_DB_MIGRATIONS=true \
+  -e NODE_ENV=production \
+  -e LOG_LEVEL=info \
+  -v beeax-server-data:/app/docker-data:Z \
+  docker.io/beeaxcrm/beeax:latest \
+  yarn worker:prod
+
+# wait some time, check status
+sleep 30
+podman ps --pod -f name=beeax-pod
+
+
+mkdir -p ~/.config/systemd/user
+if [ ! -f "beeaxcrm.service" ]; then
+    echo "Error: beeaxcrm.service file not found"
+    exit 1
+fi
+cp beeaxcrm.service ~/.config/systemd/user
+
+systemctl --user daemon-reload
+systemctl --user enable beeaxcrm.service
+systemctl --user start beeaxcrm.service
+
