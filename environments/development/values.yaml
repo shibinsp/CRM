@@ -1,0 +1,55 @@
+# BeeAX CRM — Helm overrides · DEVELOPMENT
+# Deploy: helm upgrade --install beeax packages/beeax-docker/helm/beeax \
+#           -n beeax-development --create-namespace -f environments/development/values.yaml
+# Only overrides the base chart values (packages/beeax-docker/helm/beeax/values.yaml).
+
+image:
+  tag: "latest"
+  pullPolicy: Always
+
+storage:
+  type: local
+
+server:
+  replicaCount: 1
+  env:
+    SIGN_IN_PREFILLED: "true"
+  extraEnv:
+    - name: IS_MULTIWORKSPACE_ENABLED
+      value: "false"
+    - name: IS_EMAIL_VERIFICATION_REQUIRED
+      value: "false"
+    - name: LOG_LEVELS
+      value: "error,warn,log,debug"
+    - name: EXCEPTION_HANDLER_DRIVER
+      value: "console"
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+  ingress:
+    enabled: true
+    className: nginx
+    hosts:
+      - host: dev.beeax.app
+    tls: []
+
+worker:
+  replicaCount: 1
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+# Dev uses the chart's in-cluster Postgres + Redis (fine for non-critical data)
+db:
+  internal:
+    enabled: true
+redisInternal:
+  enabled: true
