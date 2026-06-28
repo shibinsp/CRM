@@ -1,4 +1,12 @@
-# BeeAX CRM
+<p align="center">
+  <img src="images/brand/beeax-logo-source.jpeg" width="120" alt="BeeAX logo" />
+</p>
+
+<h1 align="center">BeeAX CRM</h1>
+
+<p align="center">The AI-native CRM you build, ship, and version like the rest of your stack.</p>
+
+---
 
 BeeAX CRM is an open-source, customizable CRM platform. It gives technical teams the
 building blocks of a modern CRM — objects, fields, views, workflows, and AI agents — and
@@ -10,6 +18,24 @@ tables and a generated GraphQL API.
 
 - **Repository:** https://github.com/shibinsp/CRM
 - **License:** AGPL-3.0 (see [LICENSE](./LICENSE))
+
+## Screenshots
+
+**Landing page**
+
+![BeeAX landing page](images/screenshots/beeax-landing.png)
+
+**Sign in**
+
+![BeeAX sign-in](images/screenshots/beeax-login-hero.png)
+
+**Companies (CRM records)**
+
+![BeeAX companies](images/screenshots/beeax-data.png)
+
+**Dashboard**
+
+![BeeAX dashboard](images/screenshots/beeax-dashboard.png)
 
 ## Features
 
