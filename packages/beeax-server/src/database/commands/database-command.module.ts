@@ -9,6 +9,7 @@ import { GenerateInstanceCommandCommand } from 'src/database/commands/generate-i
 import { InstallPreInstalledAppsCommand } from 'src/database/commands/install-pre-installed-apps.command';
 import { InstanceCommandGenerationService } from 'src/database/commands/instance-command-generation.service';
 import { ListOrphanedWorkspaceEntitiesCommand } from 'src/database/commands/list-and-delete-orphaned-workspace-entities.command';
+import { MessageThreadSummarizeCommand } from 'src/database/commands/message-thread-summarize.command';
 import { OpportunityScoreCommand } from 'src/database/commands/opportunity-score.command';
 import { ConfirmationQuestion } from 'src/database/commands/questions/confirmation.question';
 import { RebuildApplicationDefaultDepsCommand } from 'src/database/commands/rebuild-application-default-deps.command';
@@ -110,6 +111,7 @@ import { AutomatedTriggerModule } from 'src/modules/workflow/workflow-trigger/au
     RebuildApplicationDefaultDepsCommand,
     InstallPreInstalledAppsCommand,
     OpportunityScoreCommand,
+    MessageThreadSummarizeCommand,
     provideWorkspaceScopedRepository(RoleEntity),
   ],
 })
