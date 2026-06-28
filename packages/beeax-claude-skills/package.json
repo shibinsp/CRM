@@ -1,0 +1,11 @@
+{
+  "name": "beeax-claude-skills",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Claude skills for working with BeeAX.",
+  "license": "AGPL-3.0",
+  "files": [
+    "skills"
+  ],
+  "author": "shibin <shibinsp43@gmail.com>"
+}
