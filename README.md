@@ -1,77 +1,75 @@
-<p align="center">
-  <img src="images/brand/beeax-logo-source.jpeg" width="120" alt="BeeAX logo" />
-</p>
+<div align="center">
 
-<h1 align="center">BeeAX CRM</h1>
+<img src="images/brand/beeax-logo-source.jpeg" width="120" alt="BeeAX logo" />
 
-<p align="center">The AI-native CRM you build, ship, and version like the rest of your stack.</p>
+# BeeAX CRM
+
+### The AI-native CRM you build, ship & version like the rest of your stack.
+
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-D4A017.svg?style=flat-square)](./LICENSE)
+![React](https://img.shields.io/badge/React-18-1E2A3A?style=flat-square&logo=react)
+![NestJS](https://img.shields.io/badge/NestJS-API-1E2A3A?style=flat-square&logo=nestjs)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-1E2A3A?style=flat-square&logo=postgresql&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-strict-1E2A3A?style=flat-square&logo=typescript&logoColor=white)
+![Nx](https://img.shields.io/badge/Nx-monorepo-1E2A3A?style=flat-square&logo=nx)
+
+[**Repository**](https://github.com/shibinsp/CRM) · [Quick start](#-quick-start) · [Features](#-features) · [Architecture](#-architecture)
+
+</div>
 
 ---
 
-BeeAX CRM is an open-source, customizable CRM platform. It gives technical teams the
-building blocks of a modern CRM — objects, fields, views, workflows, and AI agents — and
-lets you extend everything as code.
+**BeeAX CRM** is an open-source, customizable CRM platform. It gives technical teams the
+building blocks of a modern CRM — objects, fields, views, workflows, and AI agents — and lets
+you extend everything as code.
 
-The data model is fully metadata-driven: standard objects (companies, people, opportunities,
-notes, tasks) and any custom objects you define are first-class, each backed by real database
-tables and a generated GraphQL API.
+The data model is fully **metadata-driven**: standard objects (companies, people, opportunities,
+notes, tasks) and any custom objects you define are first-class, each backed by a real database
+table and a generated GraphQL API.
 
-- **Repository:** https://github.com/shibinsp/CRM
-- **License:** AGPL-3.0 (see [LICENSE](./LICENSE))
+## 📸 Screenshots
 
-## Screenshots
+<table>
+  <tr>
+    <td width="50%"><img src="images/screenshots/beeax-landing.png" alt="Landing page" /></td>
+    <td width="50%"><img src="images/screenshots/beeax-login-hero.png" alt="Sign in" /></td>
+  </tr>
+  <tr>
+    <td align="center"><sub><b>Landing page</b></sub></td>
+    <td align="center"><sub><b>Sign in</b></sub></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="images/screenshots/beeax-data.png" alt="Companies" /></td>
+    <td width="50%"><img src="images/screenshots/beeax-dashboard.png" alt="Dashboard" /></td>
+  </tr>
+  <tr>
+    <td align="center"><sub><b>Companies (CRM records)</b></sub></td>
+    <td align="center"><sub><b>Dashboard</b></sub></td>
+  </tr>
+</table>
 
-**Landing page**
+## ✨ Features
 
-![BeeAX landing page](images/screenshots/beeax-landing.png)
+| | |
+|---|---|
+| 🗂️ **Metadata-driven model** | Custom objects & fields with real tables, indexes, and APIs |
+| 📊 **Multiple views** | Table, kanban, and calendar with filters, sorts, and grouping |
+| ⚡ **Workflows & automation** | Triggers, actions, and a visual builder |
+| 🤖 **AI agents built in** | Assistants and automation powered by the latest models |
+| ✉️ **Email & calendar sync** | Gmail / Microsoft via OAuth |
+| 🔒 **Granular permissions** | Object-, field-, and row-level access control |
+| 🔌 **REST & GraphQL APIs** | Plus API keys and webhooks |
+| 🏢 **Multi-tenant** | Isolated per-workspace schemas |
 
-**Sign in**
+## 🛠 Tech stack
 
-![BeeAX sign-in](images/screenshots/beeax-login-hero.png)
+- **Frontend** — React, TypeScript, Jotai, Linaria, Vite, Apollo Client
+- **Backend** — NestJS, TypeORM, PostgreSQL, Redis, GraphQL (GraphQL Yoga), BullMQ
+- **Monorepo** — Nx workspace managed with Yarn 4 (Node 24)
 
-**Companies (CRM records)**
+## 🚀 Quick start
 
-![BeeAX companies](images/screenshots/beeax-data.png)
-
-**Dashboard**
-
-![BeeAX dashboard](images/screenshots/beeax-dashboard.png)
-
-## Features
-
-- **Metadata-driven data model** — custom objects and fields with real tables, indexes, and APIs
-- **Multiple views** — table, kanban, and calendar with filters, sorts, and grouping
-- **Workflows & automation** — triggers, actions, and a visual builder
-- **AI agents** — assistants and automation powered by the latest models
-- **Email & calendar sync** — Gmail / Microsoft via OAuth
-- **Granular permissions** — object-, field-, and row-level access control
-- **REST & GraphQL APIs** — plus API keys and webhooks
-- **Multi-tenant** — isolated per-workspace schemas
-
-## Tech stack
-
-- **Frontend:** React, TypeScript, Jotai, Linaria, Vite, Apollo Client
-- **Backend:** NestJS, TypeORM, PostgreSQL, Redis, GraphQL (GraphQL Yoga), BullMQ
-- **Monorepo:** Nx workspace managed with Yarn 4 (Node 24)
-
-## Monorepo structure
-
-```
-packages/
-├── beeax-front/      # React frontend application
-├── beeax-server/     # NestJS backend API + worker
-├── beeax-ui/         # Shared UI component library
-├── beeax-shared/     # Common types and utilities
-├── beeax-emails/     # Transactional email templates (React Email)
-├── beeax-sdk/        # CLI + SDK for building apps as code
-├── beeax-docker/     # Docker, Compose, and Kubernetes manifests
-├── beeax-docs/       # Documentation
-└── beeax-website/    # Marketing website
-```
-
-## Getting started (local development)
-
-**Prerequisites:** Node `^24.5.0`, Yarn `>=4`, and either local PostgreSQL + Redis or Docker.
+**Prerequisites:** Node `^24.5.0`, Yarn `>= 4`, and either local PostgreSQL + Redis or Docker.
 
 ```bash
 # 1. Clone
@@ -81,46 +79,56 @@ cd CRM
 # 2. Install dependencies
 yarn install
 
-# 3. Set up the dev environment
-#    (starts Postgres + Redis, copies .env files, initializes the database)
+# 3. Configure environment (development)
+cp environments/development/server.env packages/beeax-server/.env
+cp environments/development/front.env  packages/beeax-front/.env
+
+# 4. Start Postgres + Redis and initialize the database
 bash packages/beeax-utils/setup-dev-env.sh
 
-# 4. Start frontend + backend + worker
+# 5. Run frontend + backend + worker
 yarn start
 ```
 
-The frontend runs on http://localhost:3001 and the server on http://localhost:3000.
-On the sign-in screen, click **Continue with Email** to use the prefilled local credentials.
+Frontend → http://localhost:3001 · API → http://localhost:3000
 
-## Running with Docker
+## 🧱 Architecture
 
-```bash
-cd packages/beeax-docker
-cp .env.example .env   # set ENCRYPTION_KEY, APP_SECRET, etc.
-docker compose up -d
+```
+packages/
+├── beeax-front/      # React frontend (the CRM UI)
+├── beeax-server/     # NestJS backend API + worker
+├── beeax-ui/         # Shared UI component library + theme
+├── beeax-shared/     # Common types and utilities
+├── beeax-emails/     # Transactional email templates
+├── beeax-sdk/        # CLI + SDK for building apps as code
+├── beeax-docker/     # Docker, Compose, Helm chart, k8s manifests
+├── beeax-docs/       # Documentation
+└── beeax-website/    # Marketing website
+
+environments/         # Per-env config (development / staging / production)
+images/               # Brand assets + screenshots
 ```
 
-## Common commands
+## 🌍 Environments
+
+Multi-environment config lives in [`environments/`](./environments) — per-env app config and
+Helm values for **development**, **staging**, and **production** (Kubernetes namespaces
+`beeax-development` / `beeax-staging` / `beeax-production`). See
+[`environments/README.md`](./environments/README.md).
 
 ```bash
-# Run a single test file
-npx jest path/to/test.test.ts --config=packages/<package>/jest.config.mjs
-
-# Lint / typecheck a package
-npx nx lint beeax-front
-npx nx typecheck beeax-server
-
-# Build (build beeax-shared first)
-npx nx build beeax-shared
-npx nx build beeax-front
-npx nx build beeax-server
-
-# Reset the database
-npx nx database:reset beeax-server
+environments/deploy.sh staging --dry-run   # preview
+environments/deploy.sh production           # deploy
 ```
 
-See [CLAUDE.md](./CLAUDE.md) for the full development guide and conventions.
+## 🤝 Contributing
 
-## License
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for setup, conventions, and quality gates, and
+[CLAUDE.md](./CLAUDE.md) for the full development guide. Security policy: [SECURITY.md](./SECURITY.md).
 
-BeeAX CRM is released under the **AGPL-3.0** license. See [LICENSE](./LICENSE) for details.
+## 📄 License
+
+BeeAX CRM is released under the **AGPL-3.0** license — see [LICENSE](./LICENSE).
+
+<div align="center"><sub>© 2026 Beeax AI Tech Private Limited</sub></div>
