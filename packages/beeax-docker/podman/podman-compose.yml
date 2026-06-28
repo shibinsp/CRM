@@ -1,0 +1,56 @@
+version: "3.8"
+
+services:
+  db:
+    container_name: beeax-db
+    image: postgres:16
+    environment:
+      POSTGRES_DB: beeax
+      POSTGRES_USER: beeax
+      POSTGRES_PASSWORD: ${PG_DATABASE_PASSWORD}
+    volumes:
+      - beeax-db-data:/var/lib/postgresql/data:Z
+
+  redis:
+    container_name: beeax-redis
+    image: redis:latest
+    command: ["--maxmemory-policy", "noeviction"]
+    volumes:
+      - beeax-redis-data:/data:Z
+
+  server:
+    container_name: beeax-server
+    image: beeaxcrm/beeax:latest
+    environment:
+      NODE_PORT: "3000"
+      SERVER_URL: ${SERVER_URL}
+      PG_DATABASE_URL: "postgresql://beeax:${PG_DATABASE_PASSWORD}@beeax-db:5432/beeax"
+      REDIS_URL: "redis://beeax-redis:6379"
+      APP_SECRET: ${APP_SECRET}
+      NODE_ENV: production
+      LOG_LEVEL: info
+    volumes:
+      - beeax-server-data:/app/docker-data:Z
+    ports:
+      - 127.0.0.1:8080:3000
+
+  worker:
+    container_name: beeax-worker
+    image: beeaxcrm/beeax:latest
+    command: yarn worker:prod
+    environment:
+      SERVER_URL: ${SERVER_URL}
+      PG_DATABASE_URL: "postgresql://beeax:${PG_DATABASE_PASSWORD}@beeax-db:5432/beeax"
+      REDIS_URL: "redis://beeax-redis:6379"
+      APP_SECRET: ${APP_SECRET}
+      DISABLE_DB_MIGRATIONS: "true"
+      NODE_ENV: production
+      LOG_LEVEL: info
+    volumes:
+      - beeax-server-data:/app/docker-data:Z
+    init: true
+
+volumes:
+  beeax-db-data:
+  beeax-server-data:
+  beeax-redis-data:
