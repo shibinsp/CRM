@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { WorkspaceIteratorModule } from 'src/database/commands/command-runners/workspace-iterator.module';
+import { AddMessageThreadAiSummaryFieldCommand } from 'src/database/commands/upgrade-version-command/2-17/2-17-workspace-command-1801000040000-add-message-thread-ai-summary-field.command';
 import { AddOpportunityAiInsightsFieldCommand } from 'src/database/commands/upgrade-version-command/2-17/2-17-workspace-command-1801000030000-add-opportunity-ai-insights-field.command';
 import { AddOpportunityAiScoreFieldsCommand } from 'src/database/commands/upgrade-version-command/2-17/2-17-workspace-command-1801000020000-add-opportunity-ai-score-fields.command';
 import { AddReplyToMessageParticipantRoleOptionCommand } from 'src/database/commands/upgrade-version-command/2-17/2-17-workspace-command-1801000001000-add-reply-to-message-participant-role-option.command';
@@ -25,6 +26,7 @@ import { WorkspaceMigrationModule } from 'src/engine/workspace-manager/workspace
     AddWorkspaceMemberJobTitleFieldCommand,
     AddOpportunityAiScoreFieldsCommand,
     AddOpportunityAiInsightsFieldCommand,
+    AddMessageThreadAiSummaryFieldCommand,
   ],
 })
 export class V2_17_UpgradeVersionCommandModule {}
