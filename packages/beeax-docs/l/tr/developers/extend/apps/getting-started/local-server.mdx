@@ -1,0 +1,87 @@
+---
+title: Yerel Sunucu
+description: Yerel BeeAX Docker sunucusunu yönetin — başlatın, durdurun, yükseltin, paralel test örneği çalıştırın ve manuel SDK kurulumu yapın.
+icon: server
+---
+
+## Yerel sunucuyu yönetme
+
+Yerel BeeAX konteynerini kontrol etmek için `yarn beeax docker:*` kullanın:
+
+| Komut                                  | Ne yapar                                                  |
+| -------------------------------------- | --------------------------------------------------------- |
+| `yarn beeax docker:start`             | Sunucuyu başlatır (gerekirse imajı çeker)                 |
+| `yarn beeax docker:start 2.2.0`       | Belirli bir sunucu sürümünü başlatın                      |
+| `yarn beeax docker:start --port 3030` | Özel bir portta başlatır                                  |
+| `yarn beeax docker:stop`              | Sunucuyu durdurur (verileri korur)                        |
+| `yarn beeax docker:status`            | URL'yi, sürümü ve oturum açma kimlik bilgilerini gösterir |
+| `yarn beeax docker:logs`              | Sunucu günlüklerini akış olarak gösterir                  |
+| `yarn beeax docker:reset`             | Verileri siler ve sıfırdan başlatır                       |
+| `yarn beeax docker:upgrade`           | En güncel `beeax-app-dev` imajını çeker                  |
+| `yarn beeax docker:upgrade 2.2.0`     | Belirli bir sürüme yükseltir                              |
+
+Veriler, yeniden başlatmalar arasında iki Docker biriminde kalıcıdır (PostgreSQL için `beeax-app-dev-data`, dosyalar için `beeax-app-dev-storage`). Her şeyi silmek için `reset` kullanın.
+
+## Sunucu sürümünü sabitleme
+
+Herhangi bir sürüm iletilmediğinde, `docker:start` sürümü uygulamanızın `package.json` içindeki `engines.beeax` aralığından çözümler — bu, uygulamanız yüklendiğinde sunucunun doğruladığı aralıkla aynıdır. Bu komut, aralığı karşılayan en yeni yayımlanmış `beeax-app-dev` imajını başlatır; alan yoksa veya hiçbir yayımlanmış sürüm eşleşmiyorsa `latest` değerine geri döner:
+
+```json filename="package.json"
+{
+  "engines": {
+    "beeax": ">=2.2.0"
+  }
+}
+```
+
+Aralığı tek bir çalıştırma için geçersiz kılmak amacıyla sürümü açıkça iletin: `yarn beeax docker:start 2.3.0`. Bir kapsayıcı zaten farklı bir sürümde mevcutsa, `docker:start` onu yerinde yükseltir (veri birimlerinizi korurken kapsayıcıyı yeniden oluşturarak).
+
+## Sunucu imajını yükseltme
+
+`yarn beeax docker:upgrade`, en güncel imajı çeker, özetleri karşılaştırır ve yalnızca gerçekten bir şey değiştiyse konteyneri yeniden oluşturur. Birimler korunur — yalnızca konteyner değiştirilir. Yeni bir imaj çekildiyse ve konteyner çalışıyorsa, yükseltme otomatik olarak yeni bir konteyner başlatır; sağlıklı hale gelmesini beklemek için ardından `yarn beeax docker:start` çalıştırın.
+
+```bash filename="Terminal"
+yarn beeax docker:upgrade            # Latest
+yarn beeax docker:upgrade 2.2.0      # Specific version
+```
+
+Çalışan sürümü `yarn beeax docker:status` ile doğrulayabilirsiniz (konteynere gömülü `APP_VERSION` değerini gösterir).
+
+## Paralel bir test örneği çalıştırma
+
+Ana geliştirme verilerinize dokunmadan entegrasyon testlerini veya denemeleri yürütmek için, herhangi bir `docker:*` komutuna `--test` parametresini vererek ikinci, tamamen yalıtılmış bir örneği yönetebilirsiniz:
+
+| Komut                               | Ne yapar                                                      |
+| ----------------------------------- | ------------------------------------------------------------- |
+| `yarn beeax docker:start --test`   | Test örneğini başlatır (varsayılan bağlantı noktası 2021'dir) |
+| `yarn beeax docker:stop --test`    | Durdurur                                                      |
+| `yarn beeax docker:status --test`  | Durumunu gösterir                                             |
+| `yarn beeax docker:logs --test`    | Günlüklerini akış olarak gösterir                             |
+| `yarn beeax docker:reset --test`   | Verilerini siler                                              |
+| `yarn beeax docker:upgrade --test` | İmajını yükseltir                                             |
+
+Test örneği, kendine ait bir Docker konteynerinde (`beeax-app-dev-test`), ayrılmış birimlerle (`beeax-app-dev-test-data`, `beeax-app-dev-test-storage`) ve yapılandırmayla çalışır; böylece ana örneğinizle çakışma olmadan paralel olarak çalışabilir. Varsayılan 2021'i geçersiz kılmak için `--test` ile `--port`'u birlikte kullanın.
+
+## Manuel kurulum (iskelet oluşturucu olmadan)
+
+SDK'yı mevcut bir projeye ekliyorsanız iskelet oluşturma adımını atlayın:
+
+```bash filename="Terminal"
+yarn add beeax-sdk beeax-client-sdk
+```
+
+`package.json` dosyasına betiği ekleyin:
+
+```json filename="package.json"
+{
+  "scripts": {
+    "beeax": "beeax"
+  }
+}
+```
+
+Artık `yarn beeax dev`, `yarn beeax docker:start` ve diğerlerini çalıştırabilirsiniz.
+
+<Note>
+`beeax-sdk`'yi global olarak kurmayın — her uygulama kendi sürümünü kullansın diye proje bazında sabitleyin.
+</Note>
