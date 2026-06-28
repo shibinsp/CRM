@@ -1,5 +1,6 @@
 export enum AppPath {
   // Not logged-in
+  MarketingLanding = '/welcome-home',
   Verify = '/verify',
   VerifyEmail = '/verify-email',
   SignInUp = '/welcome',
