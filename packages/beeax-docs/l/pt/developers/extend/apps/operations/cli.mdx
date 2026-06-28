@@ -1,0 +1,105 @@
+---
+title: CLI
+description: comandos `yarn beeax` para executar funções, transmitir logs, gerenciar instalações de aplicativos e alternar remotos.
+icon: terminal
+---
+
+Além de `dev`, `dev:build`, `dev:add` e `dev:typecheck`, a CLI `yarn beeax` fornece comandos para executar funções, visualizar logs e gerenciar instalações de aplicativos.
+
+## Executando funções (`yarn beeax dev:function:exec`)
+
+Execute manualmente uma função de lógica sem acioná-la via HTTP, cron ou evento de banco de dados:
+
+```bash filename="Terminal"
+# Execute by function name
+yarn beeax dev:function:exec -n create-new-post-card
+
+# Execute by universalIdentifier
+yarn beeax dev:function:exec -u e56d363b-0bdc-4d8a-a393-6f0d1c75bdcf
+
+# Pass a JSON payload
+yarn beeax dev:function:exec -n create-new-post-card -p '{"name": "Hello"}'
+
+# Execute the post-install function
+yarn beeax dev:function:exec --postInstall
+```
+
+## Visualizando logs de funções (`yarn beeax dev:function:logs`)
+
+Transmita os logs de execução das funções de lógica do seu aplicativo:
+
+```bash filename="Terminal"
+# Stream all function logs
+yarn beeax dev:function:logs
+
+# Filter by function name
+yarn beeax dev:function:logs -n create-new-post-card
+
+# Filter by universalIdentifier
+yarn beeax dev:function:logs -u e56d363b-0bdc-4d8a-a393-6f0d1c75bdcf
+```
+
+<Note>
+Isso é diferente de `yarn beeax docker:logs`, que mostra os logs do contêiner Docker. `yarn beeax dev:function:logs` mostra os logs de execução de funções do seu aplicativo a partir do servidor BeeAX.
+</Note>
+
+## Gerando o cliente tipado (`yarn beeax dev:generate-client`)
+
+Regenerar o cliente de API tipado (`beeax-client-sdk`) a partir do esquema do remoto ativo, sem compilar nem sincronizar um aplicativo. Use-o para obter um cliente tipado em qualquer projeto — como um serviço de backend em um repositório separado — que se comunica com a sua instância do BeeAX:
+
+```bash filename="Terminal"
+# In your project (no BeeAX app definition required)
+yarn add beeax-sdk beeax-client-sdk
+
+# Connect to the BeeAX instance to generate the client from
+yarn beeax remote:add
+
+# Generate the typed client into node_modules/beeax-client-sdk
+yarn beeax dev:generate-client
+```
+
+Em seguida, importe o cliente no seu código:
+
+```typescript
+import { CoreApiClient } from 'beeax-client-sdk/core';
+```
+
+Execute novamente o comando sempre que o seu modelo de dados for alterado para atualizar os tipos gerados.
+
+<Note>
+O cliente é gerado dentro de `node_modules`, portanto não é incluído no commit junto com o seu código. Execute `yarn beeax dev:generate-client` após cada instalação (por exemplo, em um script `postinstall` ou no CI).
+</Note>
+
+## Desinstalando um aplicativo (`yarn beeax app:uninstall`)
+
+Remova seu aplicativo do espaço de trabalho ativo:
+
+```bash filename="Terminal"
+yarn beeax app:uninstall
+
+# Skip the confirmation prompt
+yarn beeax app:uninstall --yes
+```
+
+## Gerenciando remotos
+
+Um **remoto** é um servidor BeeAX ao qual seu aplicativo se conecta. Durante a configuração, o gerador de scaffold cria um para você automaticamente. Você pode adicionar mais remotos ou alternar entre eles a qualquer momento.
+
+```bash filename="Terminal"
+# Add a new remote (opens a browser for OAuth login)
+yarn beeax remote:add
+
+# Connect to a local BeeAX server (auto-detects port 2020 or 3000)
+yarn beeax remote:add --local
+
+# Add a remote non-interactively (useful for CI)
+yarn beeax remote:add --url https://your-beeax-server.com --api-key $TWENTY_API_KEY --as my-remote
+
+# List all configured remotes
+yarn beeax remote:list
+
+# Set the active remote
+yarn beeax remote:use <name>
+```
+
+Suas credenciais são armazenadas em `~/.beeax/config.json`.
