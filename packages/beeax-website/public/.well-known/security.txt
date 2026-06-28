@@ -1,0 +1,5 @@
+Contact: https://github.com/beeax/beeax/issues/new
+Contact: security@beeax.com
+Preferred-Languages: en
+Canonical: https://beeax.com/.well-known/security.txt
+Policy: https://github.com/beeax/beeax/security/policy
