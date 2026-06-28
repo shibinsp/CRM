@@ -50,16 +50,52 @@ table and a generated GraphQL API.
 
 ## ✨ Features
 
-| | |
-|---|---|
-| 🗂️ **Metadata-driven model** | Custom objects & fields with real tables, indexes, and APIs |
-| 📊 **Multiple views** | Table, kanban, and calendar with filters, sorts, and grouping |
-| ⚡ **Workflows & automation** | Triggers, actions, and a visual builder |
-| 🤖 **AI agents built in** | Assistants and automation powered by the latest models |
-| ✉️ **Email & calendar sync** | Gmail / Microsoft via OAuth |
-| 🔒 **Granular permissions** | Object-, field-, and row-level access control |
-| 🔌 **REST & GraphQL APIs** | Plus API keys and webhooks |
-| 🏢 **Multi-tenant** | Isolated per-workspace schemas |
+### 🗂️ Data model & customization
+- **Metadata-driven** — every object & field is metadata, backed by a real Postgres table
+- **Custom objects & fields** — text, number, select/multi-select, date, currency, rating, relation, links, emails, phones, address, JSON, and more
+- **Relationships** — one-to-many & many-to-many between any objects
+- **Standard CRM objects** — Companies, People, Opportunities, Tasks, Notes, Attachments
+- **Field-level settings** — labels, icons, descriptions, indexes, uniqueness
+
+### 📊 Views & navigation
+- **Table, Kanban & Calendar** views per object
+- **Filters, sorts & grouping** with multi-condition advanced filters
+- **Aggregations** in view footers (sum, average, count, min/max…)
+- **Saved views** — public & private, with custom visible fields
+- **Command menu** (⌘K) — jump anywhere, run actions, ask AI
+- **Global search** — instant, cross-object (companies, people, opportunities…)
+- **Record detail pages** — customizable layouts with tabs (Timeline, Tasks, Notes, Files, Emails, Calendar)
+
+### 📈 Dashboards
+- **Dashboards** with charts — number, bar, line widgets
+- **Front components** embedded in dashboards
+
+### ⚡ Automation & AI
+- **Workflows** — event triggers + actions with a visual builder
+- **AI agents** — native assistants that draft, summarize & act on CRM data
+- **Ask AI** from the command menu, with chat history
+
+### ✉️ Communication
+- **Email & calendar sync** — Gmail / Microsoft via OAuth
+- **Timeline** — every message, meeting & change logged on the record
+- **Compose & send email** from a record
+
+### 🔒 Security & access
+- **Role-based access control** — object-, field-, and row-level permissions
+- **SSO** — Google, Microsoft, SAML
+- **Two-factor authentication** (TOTP)
+- **Multi-tenant** — isolated per-workspace Postgres schemas
+
+### 🔌 Developer & extensibility
+- **REST & GraphQL APIs** auto-generated from your metadata
+- **API keys & webhooks** for integrations
+- **Apps as code** — define objects, views, agents & logic with the BeeAX SDK
+- **Import / export** of records
+
+### 🚀 Operations
+- **Self-hostable** — Docker, Compose, Helm chart & Kubernetes manifests
+- **Multi-environment** — development / staging / production config out of the box
+- **i18n** — 20+ languages
 
 ## 🛠 Tech stack
 
