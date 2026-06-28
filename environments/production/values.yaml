@@ -1,0 +1,68 @@
+# BeeAX CRM — Helm overrides · PRODUCTION
+# Deploy: helm upgrade --install beeax packages/beeax-docker/helm/beeax \
+#           -n beeax-production --create-namespace -f environments/production/values.yaml
+# Pin image.tag to an immutable released version (never "latest") for prod.
+
+image:
+  tag: "v1.0.0"
+  pullPolicy: IfNotPresent
+
+storage:
+  type: s3
+  s3:
+    bucket: beeax-prod-assets
+    region: REPLACE_ME
+
+server:
+  replicaCount: 3
+  env:
+    SIGN_IN_PREFILLED: "false"
+  extraEnv:
+    - name: IS_MULTIWORKSPACE_ENABLED
+      value: "true"
+    - name: IS_EMAIL_VERIFICATION_REQUIRED
+      value: "true"
+    - name: IS_WORKSPACE_CREATION_LIMITED_TO_SERVER_ADMINS
+      value: "true"
+    - name: LOG_LEVELS
+      value: "error,warn"
+    - name: EXCEPTION_HANDLER_DRIVER
+      value: "sentry"
+    - name: SENTRY_ENVIRONMENT
+      value: "production"
+  resources:
+    requests:
+      cpu: "1"
+      memory: 2Gi
+    limits:
+      cpu: "2"
+      memory: 4Gi
+  ingress:
+    enabled: true
+    className: nginx
+    hosts:
+      - host: app.beeax.app
+    tls:
+      - secretName: beeax-prod-tls
+        hosts:
+          - app.beeax.app
+
+worker:
+  replicaCount: 2
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: "2"
+      memory: 2Gi
+
+# Production must use managed, backed-up Postgres/Redis (NOT in-cluster)
+db:
+  internal:
+    enabled: false
+  host: beeax-prod-db
+redisInternal:
+  enabled: false
+redis:
+  host: beeax-prod-redis
