@@ -44,6 +44,12 @@ const SignInUpV2 = lazy(() =>
   })),
 );
 
+const MarketingLanding = lazy(() =>
+  import('~/pages/marketing/MarketingLanding').then((module) => ({
+    default: module.MarketingLanding,
+  })),
+);
+
 const PasswordReset = lazy(() =>
   import('~/pages/auth/PasswordReset').then((module) => ({
     default: module.PasswordReset,
@@ -292,6 +298,14 @@ export const useCreateAppRouter = (
           </Route>
         </Route>
         <Route element={<BlankLayout />}>
+          <Route
+            path={AppPath.MarketingLanding}
+            element={
+              <LazyRoute fallback={null}>
+                <MarketingLanding />
+              </LazyRoute>
+            }
+          />
           <Route
             path={AppPath.SignInUpV2}
             element={
