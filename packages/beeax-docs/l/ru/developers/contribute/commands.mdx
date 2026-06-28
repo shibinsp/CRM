@@ -1,0 +1,77 @@
+---
+title: Команды
+icon: terminal
+description: Полезные команды для разработки BeeAX.
+---
+
+Команды можно запускать из корня репозитория с помощью `npx nx`. Используйте `npx nx run {project}:{command}` для явного указания цели.
+
+## Запуск приложения
+
+```bash
+npx nx start beeax-front          # Frontend dev server (http://localhost:3001)
+npx nx start beeax-server         # Backend server (http://localhost:3000)
+npx nx run beeax-server:worker    # Background worker
+```
+
+## База данных
+
+```bash
+npx nx database:reset beeax-server                          # Reset and seed database
+npx nx run beeax-server:database:migrate:prod               # Run migrations
+npx nx run beeax-server:database:migrate:generate --name <name> --type <fast|slow>  # Generate a migration
+```
+
+## Линтинг
+
+```bash
+npx nx lint:diff-with-main beeax-front    # Lint changed files (fastest)
+npx nx lint:diff-with-main beeax-server
+npx nx lint beeax-front --configuration=fix  # Auto-fix
+```
+
+## Проверка типов
+
+```bash
+npx nx typecheck beeax-front
+npx nx typecheck beeax-server
+```
+
+## Тестирование
+
+```bash
+# Frontend
+npx nx test beeax-front                          # Jest unit tests
+npx nx storybook:build beeax-front               # Build Storybook
+npx nx storybook:test beeax-front                # Storybook tests
+
+# Backend
+npx nx run beeax-server:test:unit                # Unit tests
+npx nx run beeax-server:test:integration         # Integration tests
+npx nx run beeax-server:test:integration:with-db-reset  # Integration with DB reset
+
+# Single file (fastest)
+npx jest path/to/test.test.ts --config=packages/{project}/jest.config.mjs
+```
+
+## GraphQL
+
+```bash
+npx nx run beeax-front:graphql:generate                        # Regenerate types
+npx nx run beeax-front:graphql:generate --configuration=metadata  # Metadata schema
+```
+
+## Переводы
+
+```bash
+npx nx run beeax-front:lingui:extract   # Extract strings
+npx nx run beeax-front:lingui:compile   # Compile translations
+```
+
+## Сборка
+
+```bash
+npx nx build beeax-shared   # Must be built first
+npx nx build beeax-front
+npx nx build beeax-server
+```
