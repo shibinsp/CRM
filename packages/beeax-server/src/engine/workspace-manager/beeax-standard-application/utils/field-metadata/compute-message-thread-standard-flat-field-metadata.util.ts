@@ -211,6 +211,25 @@ export const buildMessageThreadStandardFlatFieldMetadatas = ({
     twentyStandardApplicationId,
     now,
   }),
+  aiSummary: createStandardFieldFlatMetadata({
+    objectName,
+    workspaceId,
+    context: {
+      fieldName: 'aiSummary',
+      type: FieldMetadataType.TEXT,
+      label: i18nLabel(msg`AI Summary`),
+      description: i18nLabel(
+        msg`AI-generated thread summary and suggested reply`,
+      ),
+      icon: 'IconSparkles',
+      isNullable: true,
+      isUIEditable: false,
+    },
+    standardObjectMetadataRelatedEntityIds,
+    dependencyFlatEntityMaps,
+    twentyStandardApplicationId,
+    now,
+  }),
   messages: createStandardRelationFieldFlatMetadata({
     objectName,
     workspaceId,
