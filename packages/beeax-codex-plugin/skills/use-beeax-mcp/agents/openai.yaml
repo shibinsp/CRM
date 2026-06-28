@@ -1,0 +1,4 @@
+interface:
+  display_name: "Use BeeAX MCP"
+  short_description: "Query BeeAX MCP and format readable records."
+  default_prompt: "Use $use-beeax-mcp to connect Codex to BeeAX MCP or retrieve readable workspace data."
