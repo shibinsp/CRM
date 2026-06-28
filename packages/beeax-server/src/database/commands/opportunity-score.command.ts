@@ -17,10 +17,18 @@ const STAGE_BASE_SCORE: Record<string, number> = {
   CUSTOMER: 95,
 };
 
-type ScoreResult = { score: number; reason: string };
+type ScoreResult = { score: number; reason: string; insights: string };
 
-// Deterministic, rule-based deal scoring (stage weight + deal-size bonus).
-// To upgrade to LLM scoring, call the AI provider here when an
+const NEXT_STEP_BY_STAGE: Record<string, string> = {
+  NEW: 'Qualify the opportunity and book a discovery call.',
+  SCREENING: 'Confirm budget, authority and decision criteria.',
+  MEETING: 'Send a tailored proposal aligned to their needs.',
+  PROPOSAL: 'Follow up on the proposal and resolve objections.',
+  CUSTOMER: 'Onboard the customer and identify expansion.',
+};
+
+// Deterministic, rule-based deal scoring + insights (stage + deal size + close date).
+// To upgrade to LLM-generated scoring/insights, call the AI provider here when an
 // OPENAI_API_KEY / ANTHROPIC_API_KEY is configured and fall back to this.
 const computeOpportunityScore = (
   opportunity: OpportunityWorkspaceEntity,
@@ -29,11 +37,32 @@ const computeOpportunityScore = (
   const dollars = (opportunity.amount?.amountMicros ?? 0) / 1_000_000;
   const sizeBonus = Math.min(5, dollars / 10_000);
   const score = Math.min(100, Math.round(base + sizeBonus));
-  const reason = `AI score (rule-based): ${opportunity.stage} stage, $${Math.round(
-    dollars / 1000,
-  )}k deal size`;
+  const sizeK = Math.round(dollars / 1000);
+  const reason = `AI score (rule-based): ${opportunity.stage} stage, $${sizeK}k deal size`;
 
-  return { score, reason };
+  const nextStep =
+    NEXT_STEP_BY_STAGE[opportunity.stage] ?? 'Review the opportunity.';
+
+  const closeDate = opportunity.closeDate
+    ? new Date(opportunity.closeDate)
+    : null;
+  const isOverdue =
+    isDefined(closeDate) &&
+    closeDate.getTime() < Date.now() &&
+    opportunity.stage !== 'CUSTOMER';
+  const risk = isOverdue
+    ? 'Close date has passed — deal may be stalled.'
+    : dollars >= 50_000 && ['NEW', 'SCREENING'].includes(opportunity.stage)
+      ? 'Large deal still early — secure an executive sponsor.'
+      : 'No major risks detected.';
+
+  const insights = [
+    `Summary: "${opportunity.name ?? 'Untitled'}" is a $${sizeK}k deal at the ${opportunity.stage} stage (score ${score}/100).`,
+    `Next step: ${nextStep}`,
+    `Risk: ${risk}`,
+  ].join('\n');
+
+  return { score, reason, insights };
 };
 
 @Command({
@@ -78,9 +107,13 @@ export class OpportunityScoreCommand extends ActiveOrSuspendedWorkspaceCommandRu
     let updatedCount = 0;
 
     for (const opportunity of opportunities) {
-      const { score, reason } = computeOpportunityScore(opportunity);
+      const { score, reason, insights } = computeOpportunityScore(opportunity);
 
-      if (opportunity.aiScore === score && opportunity.aiScoreReason === reason) {
+      if (
+        opportunity.aiScore === score &&
+        opportunity.aiScoreReason === reason &&
+        opportunity.aiInsights === insights
+      ) {
         continue;
       }
 
@@ -88,6 +121,7 @@ export class OpportunityScoreCommand extends ActiveOrSuspendedWorkspaceCommandRu
         await opportunityRepository.update(opportunity.id, {
           aiScore: score,
           aiScoreReason: reason,
+          aiInsights: insights,
         });
       }
 
