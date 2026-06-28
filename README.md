@@ -48,6 +48,21 @@ table and a generated GraphQL API.
   </tr>
 </table>
 
+## 🧠 AI features
+
+BeeAX ships AI directly on the data model. Each capability is a standard field + a
+reproducible server command (rule-based today, with a clearly-marked hook to switch to an
+LLM once `OPENAI_API_KEY` / `ANTHROPIC_API_KEY` is set in `packages/beeax-server/.env`).
+
+| Capability | What it does | Run |
+| --- | --- | --- |
+| **AI deal scoring** | 0–100 win-likelihood + reason on every Opportunity (sortable column) | `nx run beeax-server:command -- opportunity:score` |
+| **AI record insights** | Summary + recommended next step + risk on each Opportunity (shown on the record) | `nx run beeax-server:command -- opportunity:score` |
+| **AI inbox copilot** | Per-thread summary + suggested reply draft on message threads | `nx run beeax-server:command -- messageThread:summarize` |
+
+New AI fields are rolled out to existing workspaces via versioned upgrade commands
+(`upgrade:2-17:*`), so the schema stays in code and migrates cleanly.
+
 ## ✨ Features
 
 ### 🗂️ Data model & customization
