@@ -84,9 +84,10 @@ export const usePageChangeEffectNavigateLocation = () => {
     !someMatchingLocationOf([
       ...ONGOING_USER_CREATION_PATHS,
       AppPath.ResetPassword,
+      AppPath.MarketingLanding,
     ])
   ) {
-    return AppPath.SignInUp;
+    return AppPath.MarketingLanding;
   }
 
   if (
