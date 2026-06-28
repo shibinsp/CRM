@@ -1,0 +1,11 @@
+{
+  "name": "beeax-cli",
+  "version": "0.3.1",
+  "description": "[DEPRECATED] Use beeax-sdk instead: https://www.npmjs.com/package/beeax-sdk",
+  "scripts": {
+    "build": "echo 'use npx nx build'",
+    "start": "echo 'deprecated'"
+  },
+  "license": "AGPL-3.0",
+  "author": "shibin <shibinsp43@gmail.com>"
+}
