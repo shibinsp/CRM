@@ -1,0 +1,49 @@
+#
+# Crowdin CLI configuration for Documentation translations
+# See https://crowdin.github.io/crowdin-cli/configuration for more information
+#
+
+"project_id": 2
+"preserve_hierarchy": true
+"base_url": "https://beeax.api.crowdin.com"
+"base_path": ".."
+
+files: [
+  {
+    "source": "packages/beeax-docs/getting-started/**/*.mdx",
+    "translation": "packages/beeax-docs/l/%two_letters_code%/getting-started/**/%original_file_name%",
+  },
+  {
+    #
+    # MDX documentation files - user-guide
+    # Using md type to preserve JSX component structure
+    # This prevents Crowdin from reformatting <Warning>, <Accordion>, etc.
+    #
+    "source": "packages/beeax-docs/user-guide/**/*.mdx",
+    "translation": "packages/beeax-docs/l/%two_letters_code%/user-guide/**/%original_file_name%",
+  },
+  {
+    #
+    # MDX documentation files - developers
+    # Using md type to preserve JSX component structure
+    #
+    "source": "packages/beeax-docs/developers/**/*.mdx",
+    "translation": "packages/beeax-docs/l/%two_letters_code%/developers/**/%original_file_name%",
+  },
+  {
+    #
+    # MDX documentation files - beeax-ui
+    # Using md type to preserve JSX component structure
+    #
+    "source": "packages/beeax-docs/beeax-ui/**/*.mdx",
+    "translation": "packages/beeax-docs/l/%two_letters_code%/beeax-ui/**/%original_file_name%",
+  },
+  {
+    #
+    # Navigation labels template - translated into per-locale navigation.json
+    #
+    "source": "packages/beeax-docs/navigation/navigation.template.json",
+    "translation": "packages/beeax-docs/l/%two_letters_code%/navigation.json",
+  }
+]
+
