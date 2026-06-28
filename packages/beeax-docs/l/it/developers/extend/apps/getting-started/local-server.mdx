@@ -1,0 +1,87 @@
+---
+title: Server locale
+description: Gestisci il server Docker BeeAX locale — avvia, arresta, aggiorna, istanza di test parallela e configurazione manuale dell'SDK.
+icon: server
+---
+
+## Gestire il server locale
+
+Usa `yarn beeax docker:*` per controllare il container BeeAX locale:
+
+| Comando                                | Cosa fa                                            |
+| -------------------------------------- | -------------------------------------------------- |
+| `yarn beeax docker:start`             | Avvia il server (scarica l'immagine se necessario) |
+| `yarn beeax docker:start 2.2.0`       | Avvia una versione specifica del server            |
+| `yarn beeax docker:start --port 3030` | Avvia su una porta personalizzata                  |
+| `yarn beeax docker:stop`              | Arresta il server (conserva i dati)                |
+| `yarn beeax docker:status`            | Mostra URL, versione e credenziali di accesso      |
+| `yarn beeax docker:logs`              | Trasmetti in streaming i log del server            |
+| `yarn beeax docker:reset`             | Cancella i dati e riparti da zero                  |
+| `yarn beeax docker:upgrade`           | Scarica l'ultima immagine `beeax-app-dev`         |
+| `yarn beeax docker:upgrade 2.2.0`     | Aggiorna a una versione specifica                  |
+
+I dati persistono tra i riavvii in due volumi Docker (`beeax-app-dev-data` per PostgreSQL, `beeax-app-dev-storage` per i file). Usa `reset` per cancellare tutto.
+
+## Blocco della versione del server
+
+Quando non viene passata alcuna versione, `docker:start` risolve la versione dall'intervallo `engines.beeax` della tua app in `package.json`, lo stesso intervallo rispetto al quale il server effettua la convalida quando la tua app viene installata. Avvia l'immagine `beeax-app-dev` più recente pubblicata che soddisfa l'intervallo, ricorrendo a `latest` quando il campo è assente o nessuna versione pubblicata corrisponde:
+
+```json filename="package.json"
+{
+  "engines": {
+    "beeax": ">=2.2.0"
+  }
+}
+```
+
+Passa esplicitamente una versione per ignorare l'intervallo per una singola esecuzione: `yarn beeax docker:start 2.3.0`. Se un container esiste già con una versione diversa, `docker:start` lo aggiorna sul posto (ricreando il container ma preservando i volumi dei tuoi dati).
+
+## Aggiornamento dell'immagine del server
+
+`yarn beeax docker:upgrade` scarica l'ultima immagine, confronta i digest e ricrea il container solo se è cambiato qualcosa. I volumi vengono preservati — viene sostituito solo il container. Se è stata scaricata una nuova immagine e il container era in esecuzione, l'upgrade avvia automaticamente un nuovo container; esegui poi `yarn beeax docker:start` per attendere che diventi operativo.
+
+```bash filename="Terminal"
+yarn beeax docker:upgrade            # Latest
+yarn beeax docker:upgrade 2.2.0      # Specific version
+```
+
+Verifica la versione in esecuzione con `yarn beeax docker:status` (mostra `APP_VERSION` incorporata nel container).
+
+## Esecuzione di un'istanza di test parallela
+
+Passa `--test` a qualsiasi comando `docker:*` per gestire una seconda istanza completamente isolata — utile per test di integrazione o per sperimentare senza toccare i tuoi dati di sviluppo principali:
+
+| Comando                             | Cosa fa                                                                  |
+| ----------------------------------- | ------------------------------------------------------------------------ |
+| `yarn beeax docker:start --test`   | Avvia l'istanza di test (per impostazione predefinita usa la porta 2021) |
+| `yarn beeax docker:stop --test`    | Arrestala                                                                |
+| `yarn beeax docker:status --test`  | Mostra il suo stato                                                      |
+| `yarn beeax docker:logs --test`    | Trasmetti in streaming i suoi log                                        |
+| `yarn beeax docker:reset --test`   | Cancella i suoi dati                                                     |
+| `yarn beeax docker:upgrade --test` | Aggiorna la sua immagine                                                 |
+
+L'istanza di test ha il proprio container (`beeax-app-dev-test`), i propri volumi (`beeax-app-dev-test-data`, `beeax-app-dev-test-storage`) e la propria configurazione — viene eseguita insieme alla tua istanza principale senza conflitti. Combina `--test` con `--port` per sovrascrivere 2021.
+
+## Configurazione manuale (senza lo scaffolder)
+
+Salta lo strumento di scaffolding se stai aggiungendo l'SDK a un progetto esistente:
+
+```bash filename="Terminal"
+yarn add beeax-sdk beeax-client-sdk
+```
+
+Aggiungi lo script a `package.json`:
+
+```json filename="package.json"
+{
+  "scripts": {
+    "beeax": "beeax"
+  }
+}
+```
+
+Ora puoi eseguire `yarn beeax dev`, `yarn beeax docker:start` e il resto.
+
+<Note>
+Non installare `beeax-sdk` globalmente — bloccalo per progetto in modo che ogni app usi la propria versione.
+</Note>
