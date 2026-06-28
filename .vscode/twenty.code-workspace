@@ -1,0 +1,154 @@
+{
+  "folders": [
+    {
+      "name": "ROOT",
+      "path": "../"
+    },
+    {
+      "name": "packages/beeax-docker",
+      "path": "../packages/beeax-docker"
+    },
+    {
+      "name": "packages/beeax-front",
+      "path": "../packages/beeax-front"
+    },
+    {
+      "name": "packages/beeax-ui",
+      "path": "../packages/beeax-ui"
+    },
+    {
+      "name": "packages/beeax-emails",
+      "path": "../packages/beeax-emails"
+    },
+    {
+      "name": "packages/beeax-shared",
+      "path": "../packages/beeax-shared"
+    },
+    {
+      "name": "packages/beeax-server",
+      "path": "../packages/beeax-server"
+    },
+    {
+      "name": "packages/beeax-utils",
+      "path": "../packages/beeax-utils"
+    },
+    {
+      "name": "packages/beeax-zapier",
+      "path": "../packages/beeax-zapier"
+    },
+    {
+      "name": "packages/beeax-oxlint-rules",
+      "path": "../packages/beeax-oxlint-rules"
+    },
+    {
+      "name": "packages/beeax-e2e-testing",
+      "path": "../packages/beeax-e2e-testing"
+    },
+    {
+      "name": "packages/beeax-docs",
+      "path": "../packages/beeax-docs"
+    },
+    {
+      "name": "packages/create-beeax-app",
+      "path": "../packages/create-beeax-app"
+    },
+    {
+      "name": "packages/beeax-apps",
+      "path": "../packages/beeax-apps"
+    },
+    {
+      "name": "packages/beeax-claude-skills",
+      "path": "../packages/beeax-claude-skills"
+    },
+    {
+      "name": "packages/beeax-cli",
+      "path": "../packages/beeax-cli"
+    },
+    {
+      "name": "packages/beeax-client-sdk",
+      "path": "../packages/beeax-client-sdk"
+    },
+    {
+      "name": "packages/beeax-companion",
+      "path": "../packages/beeax-companion"
+    },
+    {
+      "name": "packages/beeax-front-component-renderer",
+      "path": "../packages/beeax-front-component-renderer"
+    },
+    {
+      "name": "packages/beeax-sdk",
+      "path": "../packages/beeax-sdk"
+    },
+    {
+      "name": "packages/beeax-website",
+      "path": "../packages/beeax-website"
+    }
+  ],
+  "settings": {
+    "editor.formatOnSave": false,
+    "files.eol": "auto",
+    "[typescript]": {
+      "editor.formatOnSave": true,
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.codeActionsOnSave": {
+        "source.fixAll.oxc": "explicit",
+        "source.addMissingImports": "always"
+      }
+    },
+    "[javascript]": {
+      "editor.formatOnSave": true,
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.codeActionsOnSave": {
+        "source.fixAll.oxc": "explicit",
+        "source.addMissingImports": "always"
+      }
+    },
+    "[typescriptreact]": {
+      "editor.formatOnSave": true,
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.codeActionsOnSave": {
+        "source.fixAll.oxc": "explicit",
+        "source.addMissingImports": "always"
+      }
+    },
+    "[json]": {
+      "editor.formatOnSave": true
+    },
+    "javascript.format.enable": false,
+    "typescript.format.enable": false,
+    "cSpell.enableFiletypes": [
+      "!javascript",
+      "!json",
+      "!typescript",
+      "!typescriptreact",
+      "md",
+      "mdx"
+    ],
+    "cSpell.words": [
+      "beeax"
+    ],
+    "typescript.preferences.importModuleSpecifier": "non-relative",
+    "[javascript][typescript][typescriptreact]": {
+      "editor.codeActionsOnSave": {
+        "source.fixAll.oxc": "explicit",
+        "source.addMissingImports": "always"
+      }
+    },
+    "search.exclude": {
+      "**/.yarn": true,
+    },
+    "files.exclude": {
+      "packages/": true
+    },
+    "oxc.lint.enable": true,
+    "jest.runMode": "on-demand",
+    "jest.disabledWorkspaceFolders": [
+      "ROOT",
+      "packages/beeax-zapier",
+      "packages/beeax-docker",
+      "packages/beeax-utils",
+      "packages/beeax-postgres"
+    ]
+  }
+}
