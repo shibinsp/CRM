@@ -60,3 +60,5 @@ output/playwright/
 screenshots/
 !**/public/screenshots/
 !**/assets/screenshots/
+!images/screenshots/
+!images/screenshots/**
