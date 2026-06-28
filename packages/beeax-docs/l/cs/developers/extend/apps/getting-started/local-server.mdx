@@ -1,0 +1,87 @@
+---
+title: Lokální server
+description: Spravujte lokální Docker server BeeAX – spouštění, zastavení, upgrade, paralelní testovací instance a ruční nastavení SDK.
+icon: server
+---
+
+## Správa lokálního serveru
+
+K ovládání lokálního kontejneru BeeAX použijte `yarn beeax docker:*`:
+
+| Příkaz                                 | K čemu slouží                                  |
+| -------------------------------------- | ---------------------------------------------- |
+| `yarn beeax docker:start`             | Spustí server (v případě potřeby stáhne image) |
+| `yarn beeax docker:start 2.2.0`       | Spustit konkrétní verzi serveru                |
+| `yarn beeax docker:start --port 3030` | Spustí na vlastním portu                       |
+| `yarn beeax docker:stop`              | Zastaví server (zachová data)                  |
+| `yarn beeax docker:status`            | Zobrazí URL, verzi a přihlašovací údaje        |
+| `yarn beeax docker:logs`              | Streamuje protokoly serveru                    |
+| `yarn beeax docker:reset`             | Vymaže data a začne znovu                      |
+| `yarn beeax docker:upgrade`           | Stáhne nejnovější image `beeax-app-dev`       |
+| `yarn beeax docker:upgrade 2.2.0`     | Aktualizuje na konkrétní verzi                 |
+
+Data přetrvávají při restartech ve dvou svazcích Dockeru (`beeax-app-dev-data` pro PostgreSQL, `beeax-app-dev-storage` pro soubory). Pomocí `reset` vymažte vše.
+
+## Fixace verze serveru
+
+Když není předána žádná verze, `docker:start` určí verzi z rozsahu `engines.beeax` vaší aplikace v `package.json` — stejného rozsahu, vůči kterému server ověřuje, když je vaše aplikace nainstalována. Spustí nejnovější publikovaný image `beeax-app-dev`, který splňuje tento rozsah, a pokud pole chybí nebo žádná publikovaná verze neodpovídá, použije `latest`:
+
+```json filename="package.json"
+{
+  "engines": {
+    "beeax": ">=2.2.0"
+  }
+}
+```
+
+Předáním verze můžete rozsah pro jedno spuštění přepsat: `yarn beeax docker:start 2.3.0`. Pokud už kontejner existuje v jiné verzi, `docker:start` jej na místě aktualizuje (znovu vytvoří kontejner při zachování vašich datových svazků).
+
+## Aktualizace obrazu serveru
+
+`yarn beeax docker:upgrade` stáhne nejnovější image, porovná digesty a znovu vytvoří kontejner pouze v případě, že se skutečně něco změnilo. Svazky zůstanou zachovány — nahradí se pouze kontejner. Pokud byl stažen nový image a kontejner běžel, upgrade automaticky spustí nový kontejner; poté spusťte `yarn beeax docker:start`, abyste počkali, než bude ve stavu 'healthy'.
+
+```bash filename="Terminal"
+yarn beeax docker:upgrade            # Latest
+yarn beeax docker:upgrade 2.2.0      # Specific version
+```
+
+Běžící verzi ověříte pomocí `yarn beeax docker:status` (zobrazí `APP_VERSION` zabudovanou v kontejneru).
+
+## Spuštění paralelní testovací instance
+
+Předejte `--test` libovolnému příkazu `docker:*` pro správu druhé, plně izolované instance — užitečné pro integrační testy nebo experimentování bez zásahu do vašich hlavních vývojových dat:
+
+| Příkaz                              | K čemu slouží                                    |
+| ----------------------------------- | ------------------------------------------------ |
+| `yarn beeax docker:start --test`   | Spustí testovací instanci (výchozí port je 2021) |
+| `yarn beeax docker:stop --test`    | Zastaví ji                                       |
+| `yarn beeax docker:status --test`  | Zobrazí její stav                                |
+| `yarn beeax docker:logs --test`    | Streamuje její protokoly                         |
+| `yarn beeax docker:reset --test`   | Vymaže její data                                 |
+| `yarn beeax docker:upgrade --test` | Aktualizuje její image                           |
+
+Testovací instance má vlastní kontejner (`beeax-app-dev-test`), svazky (`beeax-app-dev-test-data`, `beeax-app-dev-test-storage`) a konfiguraci — běží souběžně s vaší hlavní instancí bez konfliktů. Zkombinujte `--test` s `--port` pro změnu výchozího portu 2021.
+
+## Ruční nastavení (bez generátoru kostry)
+
+Pokud přidáváte SDK do existujícího projektu, generátor kostry přeskočte:
+
+```bash filename="Terminal"
+yarn add beeax-sdk beeax-client-sdk
+```
+
+Přidejte skript do `package.json`:
+
+```json filename="package.json"
+{
+  "scripts": {
+    "beeax": "beeax"
+  }
+}
+```
+
+Nyní můžete spouštět `yarn beeax dev`, `yarn beeax docker:start` a další.
+
+<Note>
+Neinstalujte `beeax-sdk` globálně — nainstalujte jej v každém projektu zvlášť, aby každá aplikace používala svou vlastní verzi.
+</Note>
