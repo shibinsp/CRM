@@ -15,6 +15,8 @@ export class OpportunityWorkspaceEntity extends BaseWorkspaceEntity {
   amount: CurrencyMetadata | null;
   closeDate: Date | null;
   stage: string;
+  aiScore: number | null;
+  aiScoreReason: string | null;
   position: number;
   createdBy: ActorMetadata;
   updatedBy: ActorMetadata;
