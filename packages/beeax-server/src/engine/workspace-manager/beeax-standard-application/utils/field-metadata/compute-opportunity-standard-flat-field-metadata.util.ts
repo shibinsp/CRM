@@ -252,6 +252,25 @@ export const buildOpportunityStandardFlatFieldMetadatas = ({
     twentyStandardApplicationId,
     now,
   }),
+  aiInsights: createStandardFieldFlatMetadata({
+    objectName,
+    workspaceId,
+    context: {
+      fieldName: 'aiInsights',
+      type: FieldMetadataType.TEXT,
+      label: i18nLabel(msg`AI Insights`),
+      description: i18nLabel(
+        msg`AI-generated summary, recommended next step and risk`,
+      ),
+      icon: 'IconSparkles',
+      isNullable: true,
+      isUIEditable: false,
+    },
+    standardObjectMetadataRelatedEntityIds,
+    dependencyFlatEntityMaps,
+    twentyStandardApplicationId,
+    now,
+  }),
   position: createStandardFieldFlatMetadata({
     objectName,
     workspaceId,
