@@ -1422,6 +1422,9 @@ export const STANDARD_OBJECTS = {
       subject: {
         universalIdentifier: 'a8ddbf8c-1137-45d1-b89e-5ffbd83f67c8',
       },
+      aiSummary: {
+        universalIdentifier: '30303030-0004-4004-8004-000000000004',
+      },
     },
     indexes: {},
     views: {
