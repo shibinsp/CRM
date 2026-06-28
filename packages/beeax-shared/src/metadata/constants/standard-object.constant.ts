@@ -1751,6 +1751,12 @@ export const STANDARD_OBJECTS = {
       timelineActivities: {
         universalIdentifier: '20202020-30e2-421f-96c7-19c69d1cf631',
       },
+      aiScore: {
+        universalIdentifier: '30303030-0001-4001-8001-000000000001',
+      },
+      aiScoreReason: {
+        universalIdentifier: '30303030-0002-4002-8002-000000000002',
+      },
       searchVector: {
         universalIdentifier: '428a0da5-4b2e-4ce3-b695-89a8b384e6e3',
       },
