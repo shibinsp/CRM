@@ -4,5 +4,6 @@ import { type MessageWorkspaceEntity } from 'src/modules/messaging/common/standa
 
 export class MessageThreadWorkspaceEntity extends BaseWorkspaceEntity {
   subject: string | null;
+  aiSummary: string | null;
   messages: EntityRelation<MessageWorkspaceEntity[]>;
 }
