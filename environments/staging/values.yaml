@@ -1,0 +1,65 @@
+# BeeAX CRM — Helm overrides · STAGING
+# Deploy: helm upgrade --install beeax packages/beeax-docker/helm/beeax \
+#           -n beeax-staging --create-namespace -f environments/staging/values.yaml
+
+image:
+  tag: "staging"
+  pullPolicy: Always
+
+storage:
+  type: s3
+  s3:
+    bucket: beeax-staging-assets
+    region: REPLACE_ME
+
+server:
+  replicaCount: 2
+  env:
+    SIGN_IN_PREFILLED: "false"
+  extraEnv:
+    - name: IS_MULTIWORKSPACE_ENABLED
+      value: "true"
+    - name: IS_EMAIL_VERIFICATION_REQUIRED
+      value: "true"
+    - name: LOG_LEVELS
+      value: "error,warn,log"
+    - name: EXCEPTION_HANDLER_DRIVER
+      value: "sentry"
+    - name: SENTRY_ENVIRONMENT
+      value: "staging"
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: "2"
+      memory: 2Gi
+  ingress:
+    enabled: true
+    className: nginx
+    hosts:
+      - host: staging.beeax.app
+    tls:
+      - secretName: beeax-staging-tls
+        hosts:
+          - staging.beeax.app
+
+worker:
+  replicaCount: 1
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+
+# Staging should use managed Postgres/Redis (set hosts in the Secret)
+db:
+  internal:
+    enabled: false
+  host: beeax-staging-db
+redisInternal:
+  enabled: false
+redis:
+  host: beeax-staging-redis
