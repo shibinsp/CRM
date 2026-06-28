@@ -1,0 +1,5 @@
+**/generated/*
+src/engine/metadata-modules/front-component/constants/seed-project/**
+src/engine/core-modules/upgrade/constants/beeax-current-version.constant.ts
+src/engine/core-modules/upgrade/constants/beeax-previous-versions.constant.ts
+src/engine/core-modules/upgrade/constants/beeax-next-versions.constant.ts
