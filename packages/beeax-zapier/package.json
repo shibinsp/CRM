@@ -21,11 +21,11 @@
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
+    "beeax-shared": "workspace:*",
     "jest": "29.7.0",
     "jest-environment-node": "^29.4.1",
     "rimraf": "^3.0.2",
     "ts-jest": "^29.1.1",
-    "beeax-shared": "workspace:*",
     "vite": "^8.0.0",
     "vite-plugin-dts": "^4.5.4",
     "zapier-platform-cli": "^19.0.0"
