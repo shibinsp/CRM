@@ -43,7 +43,7 @@ jobs:
       REACT_APP_SERVER_BASE_URL: http://localhost:3000
     steps:
       - name: Fetch local actions
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           fetch-depth: 10
       - name: Install dependencies
@@ -55,7 +55,7 @@ jobs:
       - name: Front / Build storybook
         run: npx nx storybook:build beeax-front
       - name: Upload storybook build
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: storybook-static
           path: packages/beeax-front/storybook-static
@@ -80,7 +80,7 @@ jobs:
       STORYBOOK_URL: http://localhost:6006
     steps:
       - name: Fetch local actions
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           fetch-depth: 10
       - name: Install dependencies
@@ -97,7 +97,7 @@ jobs:
           npx nx build beeax-ui
           npx nx build beeax-front-component-renderer
       - name: Download storybook build
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
         with:
           name: storybook-static
           path: packages/beeax-front/storybook-static
@@ -106,7 +106,7 @@ jobs:
         run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
       - name: Cache Playwright browsers
         id: playwright-cache
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        uses: actions/cache@a7833574556fa59680c1b7cb190c1735db73ebf0 # v5.0.0
         with:
           path: ~/.cache/ms-playwright
           key: v4-playwright-browsers-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}
@@ -124,7 +124,7 @@ jobs:
           npx nx storybook:test beeax-front --configuration=${{ matrix.storybook_scope }} --shard=${{ matrix.shard }}/${{ env.SHARD_COUNTER }}
       - name: Upload screenshots for visual regression
         if: always() && !cancelled() && matrix.storybook_scope != 'performance'
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: argos-screenshots-beeax-front-${{ matrix.storybook_scope }}-${{ matrix.shard }}
           path: packages/beeax-front/screenshots
@@ -140,7 +140,7 @@ jobs:
       #       exit 1
       #     fi
       # - name: Upload coverage artifact
-      #   uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+      #   uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
       #   with:
       #     retention-days: 1
       #     name: coverage-artifacts-${{ matrix.storybook_scope }}-${{ github.run_id }}-${{ matrix.shard }}
@@ -155,12 +155,12 @@ jobs:
   #     matrix:
   #       storybook_scope: [modules, pages, performance]
   #   steps:
-  #     - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+  #     - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
   #       with:
   #         fetch-depth: 10
   #     - name: Install dependencies
   #       uses: ./.github/actions/yarn-install
-  #     - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+  #     - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
   #       with:
   #         pattern: coverage-artifacts-${{ matrix.storybook_scope }}-${{ github.run_id }}-*
   #         merge-multiple: true
@@ -178,13 +178,13 @@ jobs:
     if: always() && needs.front-sb-test.result == 'success'
     steps:
       - name: Download shard screenshot artifacts
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
         with:
           pattern: argos-screenshots-beeax-front-*
           merge-multiple: true
           path: screenshots
       - name: Upload merged screenshots artifact
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: argos-screenshots-beeax-front
           path: screenshots
@@ -203,7 +203,7 @@ jobs:
         task: [lint, typecheck, test, lingui:extract, lingui:compile]
     steps:
       - name: Fetch custom Github Actions and base branch history
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           fetch-depth: 10
       - name: Install dependencies
@@ -238,7 +238,7 @@ jobs:
       ANALYZE: "true"
     steps:
       - name: Fetch custom Github Actions and base branch history
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           fetch-depth: 10
       - name: Install dependencies
@@ -248,7 +248,7 @@ jobs:
       - name: Build frontend
         run: npx nx build beeax-front
       # - name: Upload frontend build artifact
-      #   uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+      #   uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
       #   with:
       #     name: frontend-build
       #     path: packages/beeax-front/build
