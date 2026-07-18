@@ -28,13 +28,13 @@
   },
   "license": "AGPL-3.0",
   "dependencies": {
+    "beeax-sdk": "workspace:*",
     "chalk": "^5.3.0",
     "commander": "^12.0.0",
     "fs-extra": "^11.2.0",
     "lodash.camelcase": "^4.3.0",
     "lodash.kebabcase": "^4.1.1",
     "lodash.startcase": "^4.4.0",
-    "beeax-sdk": "workspace:*",
     "uuid": "^13.0.2"
   },
   "devDependencies": {
@@ -46,9 +46,9 @@
     "@types/lodash.kebabcase": "^4.1.7",
     "@types/lodash.startcase": "^4",
     "@types/node": "^20.0.0",
+    "beeax-shared": "workspace:*",
     "jest": "29.7.0",
     "jest-environment-node": "^29.4.1",
-    "beeax-shared": "workspace:*",
     "typescript": "^5.9.3",
     "vite": "^8.0.0",
     "vite-plugin-dts": "^4.5.4"
